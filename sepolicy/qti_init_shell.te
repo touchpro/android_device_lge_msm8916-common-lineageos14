@@ -1,0 +1,1 @@
+allow qti_init_shell btnvtool_exec:file { read getattr open execute execute_no_trans };

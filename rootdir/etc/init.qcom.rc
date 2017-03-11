@@ -208,6 +208,12 @@ on post-fs-data
     mkdir /data/misc/sensor 0775 system system
     restorecon_recursive /data/misc/sensor
 
+service baseband-sh /system/bin/sh /init.baseband.sh
+    class late_start
+    user root
+    oneshot
+    disabled
+
     write /proc/sys/vm/vfs_cache_pressure 10000
 
 on early-boot
@@ -567,3 +573,6 @@ service sensord /system/bin/sensord
     group system
     class late_start
     oneshot
+
+on property:gsm.version.baseband=""
+    start baseband-sh

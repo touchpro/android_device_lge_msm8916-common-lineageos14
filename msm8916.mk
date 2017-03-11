@@ -144,6 +144,7 @@ PRODUCT_PACKAGES += \
     init.qcom.power.rc \
     init.recovery.qcom.rc \
     init.target.rc \
+    init.baseband.sh \
     ueventd.qcom.rc
 
 # RIL
@@ -174,10 +175,6 @@ PRODUCT_PACKAGES += \
     wcnss_service \
     wpa_supplicant \
     wpa_supplicant.conf
-
-# Baseband
-PRODUCT_COPY_FILES += \
-    device/lge/msm8916-common/configs/10baseband:system/etc/init.d/10baseband 
 
 # Gestures
 PRODUCT_PACKAGES += \
