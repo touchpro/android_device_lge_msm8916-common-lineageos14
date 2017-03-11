@@ -50,6 +50,28 @@ on init
 
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
+    # START touch_driver
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_data
+    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_data
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_notify
+    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_notify
+    chown system system /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
+    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
+    chown system system /sys/devices/virtual/input/lge_touch/ts_noise
+    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise
+    chmod 664 /sys/devices/virtual/input/lge_touch/quick_cover_status
+    chown system system /sys/devices/virtual/input/lge_touch/quick_cover_status
+    chown system lgkeyguard /sys/devices/virtual/input/lge_touch/keyguard
+    chmod 664 /sys/devices/virtual/input/lge_touch/keyguard
+    chown system system /sys/devices/virtual/input/lge_touch/pen_support
+    chmod 664 /sys/devices/virtual/input/lge_touch/pen_support
+    chown system system /sys/devices/virtual/input/lge_touch/ime_status
+    chmod 664 /sys/devices/virtual/input/lge_touch/ime_status
+    chown system system /sys/devices/virtual/input/lge_touch/rawdata
+    chmod 664 /sys/devices/virtual/input/lge_touch/rawdata
+    chown system system /sys/devices/virtual/input/lge_touch/use_quick_window
+    chmod 664 /sys/devices/virtual/input/lge_touch/use_quick_window
+
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -543,10 +565,5 @@ service wcnss-service /system/bin/wcnss_service
 service sensord /system/bin/sensord
     user system
     group system
-    class late_start
-    oneshot
-
-# Set baseband
-service set-baseband /system/bin/set-baseband
     class late_start
     oneshot

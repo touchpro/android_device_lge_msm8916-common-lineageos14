@@ -1,0 +1,5 @@
+#!/system/bin/sh
+su
+
+setprop gsm.version.baseband `strings /dev/block/bootdevice/by-name/modem | grep "^MPSS.DPM." | head -1`
+

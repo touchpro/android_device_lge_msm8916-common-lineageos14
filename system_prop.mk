@@ -13,9 +13,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
-persist.camera.pip.support=0 \
-media.stagefright.legacyencoder=true \
-media.stagefright.less-secure=true
+persist.camera.pip.support=0
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1

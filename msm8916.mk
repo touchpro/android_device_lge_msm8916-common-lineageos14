@@ -61,11 +61,9 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:system/etc/a2dp_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:system/etc/r_submix_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:system/etc/usb_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:system/etc/default_volume_tables.xml
+    $(LOCAL_PATH)/configs/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/configs/audio_platform_info.xml:system/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -107,10 +105,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_codecs_msm8916.xml:system/etc/media_codecs.xml
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
+    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -145,7 +142,6 @@ PRODUCT_PACKAGES += \
     init.qcom.usb.rc \
     init.qcom.bt.sh \
     init.qcom.power.rc \
-    init.qcom.ril.sh \
     init.recovery.qcom.rc \
     init.target.rc \
     ueventd.qcom.rc
@@ -155,9 +151,6 @@ PRODUCT_PACKAGES += \
     libxml2 \
     liblge \
     librmnetctl
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/set-baseband:system/bin/set-baseband
 
 # Snap
 PRODUCT_PACKAGES += \
@@ -181,6 +174,14 @@ PRODUCT_PACKAGES += \
     wcnss_service \
     wpa_supplicant \
     wpa_supplicant.conf
+
+# Baseband
+PRODUCT_COPY_FILES += \
+    device/lge/msm8916-common/configs/10baseband:system/etc/init.d/10baseband 
+
+# Gestures
+PRODUCT_PACKAGES += \
+    GestureHandler
 
 PRODUCT_COPY_FILES += \
     device/lge/msm8916-common/wcnss/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant.conf \
