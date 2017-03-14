@@ -50,28 +50,6 @@ on init
 
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
-    # START touch_driver
-    chown system system /sys/devices/virtual/input/lge_touch/lpwg_data
-    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_data
-    chown system system /sys/devices/virtual/input/lge_touch/lpwg_notify
-    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_notify
-    chown system system /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
-    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
-    chown system system /sys/devices/virtual/input/lge_touch/ts_noise
-    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise
-    chmod 664 /sys/devices/virtual/input/lge_touch/quick_cover_status
-    chown system system /sys/devices/virtual/input/lge_touch/quick_cover_status
-    chown system lgkeyguard /sys/devices/virtual/input/lge_touch/keyguard
-    chmod 664 /sys/devices/virtual/input/lge_touch/keyguard
-    chown system system /sys/devices/virtual/input/lge_touch/pen_support
-    chmod 664 /sys/devices/virtual/input/lge_touch/pen_support
-    chown system system /sys/devices/virtual/input/lge_touch/ime_status
-    chmod 664 /sys/devices/virtual/input/lge_touch/ime_status
-    chown system system /sys/devices/virtual/input/lge_touch/rawdata
-    chmod 664 /sys/devices/virtual/input/lge_touch/rawdata
-    chown system system /sys/devices/virtual/input/lge_touch/use_quick_window
-    chmod 664 /sys/devices/virtual/input/lge_touch/use_quick_window
-
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -273,6 +251,15 @@ on boot
 
     setprop wifi.interface wlan0
 
+    # permissions for NFC
+    chmod 0600 /dev/pn547
+    chown nfc nfc /dev/pn547
+    setprop debug.nfc.fw_download "true"
+    setprop debug.nfc.fw_boot_download "false"
+  		  
+    # HAL looks for pn54x but kernel driver uses pn547
+    symlink /dev/pn547 /dev/pn54x
+
 #   Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.wifi    524288,2097152,4194304,262144,524288,1048576
@@ -354,6 +341,39 @@ on boot
     chmod 0664 /sys/class/graphics/fb0/idle_time
 
     write /dev/wcnss_wlan ""
+
+# START touch_driver
+    chown system system /sys/devices/virtual/input/lge_touch/incoming_call
+    chmod 664 /sys/devices/virtual/input/lge_touch/incoming_call
+    chown system system /sys/devices/virtual/input/lge_touch/ime_status
+    chown system lgkeyguard /sys/devices/virtual/input/lge_touch/keyguard
+    chmod 664 /sys/devices/virtual/input/lge_touch/keyguard
+    chown system system /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
+    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise_log_enable
+    chown system system /sys/devices/virtual/input/lge_touch/ts_noise
+    chmod 664 /sys/devices/virtual/input/lge_touch/ts_noise
+    chown system system /sys/devices/virtual/input/lge_touch/sensing_test
+    chmod 664 /sys/devices/virtual/input/lge_touch/sensing_test
+    chown system system /sys/devices/virtual/input/lge_touch/hidden_normal_cal_state
+    chmod 664 /sys/devices/virtual/input/lge_touch/hidden_normal_cal_state
+    chown system system /sys/devices/virtual/input/lge_touch/hidden_lpwg_cal_state
+    chmod 664 /sys/devices/virtual/input/lge_touch/hidden_lpwg_cal_state
+# END touch_driver
+
+# START touch_knock_on
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_data
+    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_data
+    chown system radio /sys/devices/virtual/input/lge_touch/lpwg_notify
+    chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_notify
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_info
+    chmod 644 /sys/devices/virtual/input/lge_touch/lpwg_test_info
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_ctrl
+    chmod 644 /sys/devices/virtual/input/lge_touch/lpwg_test_ctrl
+    chown system system /sys/devices/virtual/input/lge_touch/touch_wake_up_test
+    chmod 664 /sys/devices/virtual/input/lge_touch/touch_wake_up_test
+    chown system system /sys/devices/virtual/input/lge_touch/quick_cover_status
+    chmod 664 /sys/devices/virtual/input/lge_touch/quick_cover_status
+# END touch_knock_on
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
