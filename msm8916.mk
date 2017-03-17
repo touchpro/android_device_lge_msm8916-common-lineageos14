@@ -63,7 +63,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_effects.conf:system/vendor/etc/audio_effects.conf \
     $(LOCAL_PATH)/configs/audio_platform_info.xml:system/etc/audio_platform_info.xml \
-    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
+    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/configs/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Charger
 PRODUCT_PACKAGES += \
@@ -147,11 +148,17 @@ PRODUCT_PACKAGES += \
     init.baseband.sh \
     ueventd.qcom.rc
 
+# Debug
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.secure=0 \
+    ro.adb.secure=0 \
+    security.perf_harden=0
+
 # RIL
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
     libxml2 \
     liblge \
+    libqsap_sdk \
     librmnetctl
 
 # Snap

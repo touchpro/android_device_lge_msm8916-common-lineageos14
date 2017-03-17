@@ -4,12 +4,17 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
-    audio.offload.buffer.size.kb=64 \
-    audio.offload.gapless.enabled=true \
-    audio.offload.min.duration.secs=30 \
+    ro.qc.sdk.audio.ssr=false \
+    persist.audio.ssr.3mic=false \
+    persist.audio.fluence.voicecall=true \
+    persist.audio.fluence.voicerec=false \
+    persist.audio.fluence.speaker=true \
+    ro.qc.sdk.audio.fluencetype=fluence \
+    ro.qc.sdk.audio.ssr=false \
     tunnel.audio.encode=false \
-    av.offload.enable=false \
-    use.voice.path.for.pcm.voip=true
+    use.voice.path.for.pcm.voip=true \
+    use.dedicated.device.for.voip=true \
+    av.offload.enable=false
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -78,3 +83,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Time
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
+
+# Sensors
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.debug.sensors.hal=e \
+    debug.qualcomm.sns.daemon=e \
+    debug.qualcomm.sns.hal=e \
+    debug.qualcomm.sns.libsensor1=e

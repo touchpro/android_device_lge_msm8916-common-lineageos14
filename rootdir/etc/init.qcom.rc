@@ -50,6 +50,11 @@ on init
 
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
+    chown system system /sys/class/leds/red/pattern_id
+    chmod 0664 /sys/class/leds/red/pattern_id
+    chown system system /sys/class/leds/red/brightness
+    chmod 0644 /sys/class/leds/red/brightness
+
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system

@@ -1,5 +1,0 @@
-allow qti_init_shell radio_prop:property_service { set };
-allow init debugfs:dir mounton;
-allow init system_data_file:fifo_file write;
-allow init system_data_file:file append;
-allow init wcnss_device:chr_file write;
