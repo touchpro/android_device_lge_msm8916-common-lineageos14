@@ -29,19 +29,5 @@ $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wcd9306; \
         ln -sf /data/misc/audio/mbhc.bin \
         $(TARGET_OUT_ETC)/firmware/wcd9306/wcd9306_mbhc.bin)
 
-# Create firmware links
-FIRMWARE_IMAGES := \
-    modem.b00 modem.b01 modem.b02 modem.b03 modem.b04 modem.b05 modem.b08 modem.b10 modem.mdt \
-    modem.b11 modem.b14 modem.b15 modem.b16 modem.b17 modem.b18 modem.b19 modem.b20 \
-    modem.b23 modem.b24 modem.b25 modem.b27 modem.b28 \
-
-FIRMWARE_SYMLINKS := $(addprefix $(TARGET_OUT_ETC)/firmware/,$(notdir $(FIRMWARE_IMAGES)))
-$(FIRMWARE_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
-	@echo "Firmware link: $@"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	$(hide) ln -sf /firmware/image/$(notdir $@) $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(FIRMWARE_SYMLINKS)
 endif
 endif

@@ -4,17 +4,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.audio.ssr=false \
-    persist.audio.ssr.3mic=false \
-    persist.audio.fluence.voicecall=true \
-    persist.audio.fluence.voicerec=false \
-    persist.audio.fluence.speaker=true \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    ro.qc.sdk.audio.ssr=false \
+    audio.offload.buffer.size.kb=64 \
+    audio.offload.gapless.enabled=true \
+    audio.offload.min.duration.secs=30 \
     tunnel.audio.encode=false \
-    use.voice.path.for.pcm.voip=true \
-    use.dedicated.device.for.voip=true \
-    av.offload.enable=false
+    av.offload.enable=false \
+    use.voice.path.for.pcm.voip=true
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -73,7 +68,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.netmgrd.qos.enable=false \
     persist.radio.apm_sim_not_pwdn=1 \
-    ro.use_data_netmgrd=true
+    ro.use_data_netmgrd=true \
+    rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
+    telephony.lteOnGsmDevice=1 \
+    ro.telephony.default_network=9
 
 # Set max background services
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -82,10 +80,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Time
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
-
-# Sensors
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.debug.sensors.hal=e \
-    debug.qualcomm.sns.daemon=e \
-    debug.qualcomm.sns.hal=e \
-    debug.qualcomm.sns.libsensor1=e
