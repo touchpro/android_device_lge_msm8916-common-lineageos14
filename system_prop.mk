@@ -71,6 +71,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.use_data_netmgrd=true \
     rild.libpath=/vendor/lib/libril-qc-qmi-1.so \
     telephony.lteOnGsmDevice=1 \
+    DEVICE_PROVISIONED=1 \
     ro.telephony.default_network=9
 
 # Set max background services
@@ -80,3 +81,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Time
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.qualcomm.sns.hal=1 \
+    debug.qualcomm.sns.daemon=1 \
+    debug.qualcomm.sns.libsensor1=1 \
+    persist.debug.sensors.hal=1 \
+    persist.debug.ar.hal=1 

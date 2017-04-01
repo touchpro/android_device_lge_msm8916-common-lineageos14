@@ -183,6 +183,10 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
+# Sensor HAL conf file
+PRODUCT_COPY_FILES += \
+    device/lge/msm8916-common/configs/sensors/hals.conf:system/etc/sensors/hals.conf
+
 # Gestures
 PRODUCT_PACKAGES += \
     GestureHandler
