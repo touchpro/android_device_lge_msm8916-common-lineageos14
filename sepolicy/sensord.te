@@ -1,0 +1,14 @@
+type sensord, domain;
+type sensord_exec, exec_type, file_type;
+init_daemon_domain(sensord)
+
+allow sensord proc:file { getattr open read };
+allow sensord sysfs:file { open read write };
+allow sensord system_data_file:dir { add_name remove_name setattr write };
+allow sensord system_data_file:fifo_file { open read setattr write create };
+allow sensord system_data_file:file { open read };
+allow sensord unlabeled:file { open read };
+allow sensord input_device:dir search;
+allow sensord unlabeled:dir search;
+allow sensord input_device:chr_file { read open };
+allow sensord self:capability { dac_override dac_read_search fowner };

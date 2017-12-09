@@ -28,6 +28,7 @@
 import init.qcom.usb.rc
 import init.qcom.power.rc
 import init.target.rc
+import init.board.sensors.rc
 
 on early-init
     symlink /dev/diag_lge /dev/diag
@@ -38,7 +39,7 @@ on early-init
 
 on init
 
-    export LD_SHIM_LIBS /system/lib/libril.so|liblge.so:/system/lib/libril.so|liblge.so
+export LD_SHIM_LIBS /system/lib/libril.so|liblge.so:/system/lib/libril.so|liblge.so:/system/vendor/lib/lib-imsvt.so|libshims_ims.so
 
     # Set permissions for persist partition
     mkdir /persist 0771 system system
@@ -118,6 +119,10 @@ on post-fs-data
     chown system system /sys/devices/platform/msm_sdcc.3/polling
     chown system system /sys/devices/platform/msm_sdcc.4/polling
 
+    # Allow Torch app use torch
+    chown system system /sys/class/leds/led:flash_torch/brightness
+    chmod 0666 /sys/class/leds/led:flash_torch/brightness
+
     #Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
     mkdir /data/system 0775 system system
     #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
@@ -195,6 +200,16 @@ on post-fs-data
     # Ugly sensors hack
     write /sys/devices/virtual/input/lge_accelerometer/enable 1
     write /sys/devices/virtual/input/lge_magnetometer/enable 1
+    write /sys/devices/virtual/input/lge_proximity/enable 1
+    write /sys/devices/virtual/input/lge_light/enable 1
+
+    #Proximity sensor
+    chown system system /sys/class/input/event0/device/enable
+    chmod 0660 /sys/class/input/event0/device/enable
+
+    #FM Radio
+    mkdir /data/misc/fm 0770 system system
+    chmod 0770 /data/misc/fm
 
 service baseband-sh /system/bin/sh /init.baseband.sh
     class late_start
@@ -251,6 +266,11 @@ on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+    #FM Radio
+    chmod 0644 /dev/radio0
+    chown fm_radio fm_radio /dev/radio0
+    setprop ro.fm.module QCT
+
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -274,7 +294,7 @@ on boot
     chown nfc nfc /dev/pn547
     setprop debug.nfc.fw_download "true"
     setprop debug.nfc.fw_boot_download "false"
-  		  
+
     # HAL looks for pn54x but kernel driver uses pn547
     symlink /dev/pn547 /dev/pn54x
 
@@ -282,12 +302,10 @@ on boot
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.wifi    524288,2097152,4194304,262144,524288,1048576
 
-
     setprop ro.telephony.call_ring.multiple false
 
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
-
 
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
@@ -360,7 +378,11 @@ on boot
 
     write /dev/wcnss_wlan ""
 
-# START touch_driver
+    # Flashlight
+    chown system system /sys/class/leds/torch-light/brightness
+    chmod 0666 /sys/class/leds/torch-light/brightness
+
+    # START touch_driver
     chown system system /sys/devices/virtual/input/lge_touch/incoming_call
     chmod 664 /sys/devices/virtual/input/lge_touch/incoming_call
     chown system system /sys/devices/virtual/input/lge_touch/ime_status
@@ -376,14 +398,14 @@ on boot
     chmod 664 /sys/devices/virtual/input/lge_touch/hidden_normal_cal_state
     chown system system /sys/devices/virtual/input/lge_touch/hidden_lpwg_cal_state
     chmod 664 /sys/devices/virtual/input/lge_touch/hidden_lpwg_cal_state
-# END touch_driver
+    # END touch_driver
 
-# START touch_knock_on
+    # START touch_knock_on
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_data
     chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_data
     chown system radio /sys/devices/virtual/input/lge_touch/lpwg_notify
     chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_notify
-    write /sys/class/devices/virtual/input/lge_touch/lpwg_notify 1
+    #write /sys/class/devices/virtual/input/lge_touch/lpwg_notify 1
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_info
     chmod 644 /sys/devices/virtual/input/lge_touch/lpwg_test_info
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_ctrl
@@ -392,7 +414,60 @@ on boot
     chmod 664 /sys/devices/virtual/input/lge_touch/touch_wake_up_test
     chown system system /sys/devices/virtual/input/lge_touch/quick_cover_status
     chmod 664 /sys/devices/virtual/input/lge_touch/quick_cover_status
-# END touch_knock_on
+    chown system system /sys/devices/virtual/input/lge_touch/knock_on_type
+    chmod 664 /sys/devices/virtual/input/lge_touch/knock_on_type
+    chown system system /sys/devices/virtual/input/lge_touch/tap_to_wake
+    chmod 664 /sys/devices/virtual/input/lge_touch/tap_to_wake
+    # END touch_knock_on
+
+    # Permissions for System Server and daemons.
+    chown radio system /sys/android_power/state
+    chown radio system /sys/android_power/request_state
+    chown radio system /sys/android_power/acquire_full_wake_lock
+    chown radio system /sys/android_power/acquire_partial_wake_lock
+    chown radio system /sys/android_power/release_wake_lock
+    chown system system /sys/power/autosleep
+    chown system system /sys/power/state
+    chown system system /sys/power/wakeup_count
+    chown radio system /sys/power/wake_lock
+    chown radio system /sys/power/wake_unlock
+    chmod 0660 /sys/power/state
+    chmod 0660 /sys/power/wake_lock
+    chmod 0660 /sys/power/wake_unlock
+
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/timer_slack
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/target_loads
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+
+    # Assume SMP uses shared cpufreq policy for all CPUs
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
+    # vm_bms
+    chown root system /sys/class/power_supply/bms/current_now
+    chown root system /sys/class/power_supply/bms/voltage_ocv
+    chmod 0664 /sys/class/power_supply/bms/current_now
+    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
@@ -571,6 +646,12 @@ service perfd /system/vendor/bin/perfd
    user root
    disabled
 
+service mpdecision /system/bin/mpdecision --avg_comp
+   class main
+   user root
+   group system
+   disabled
+
 service thermal-engine /system/vendor/bin/thermal-engine
    class main
    user root
@@ -610,10 +691,81 @@ service wcnss-service /system/bin/wcnss_service
 
 # Sensor daemon
 service sensord /system/bin/sensord
-    user system
-    group system
-    class late_start
+    class main
+    user root
+    group system misc input root
+
+on property:init.svc.zygote=restarting
+    restart sensord
+
+service ril-daemon2 /system/bin/rild -c 2
+    class main
+    socket rild2 stream 660 root radio
+    socket rild-debug2 stream 660 radio system
+    user root
+    group radio cache inet misc audio sdcard_r sdcard_rw qcom_diag log net_raw
+
+service qcom-c_main-sh /system/bin/sh /init.class_main.sh
+    class main
+    user root
     oneshot
 
 on property:gsm.version.baseband=""
     start baseband-sh
+
+service vm_bms /system/bin/vm_bms
+    class main
+    user root
+    group root wakelock
+
+service ims_rtp_daemon /system/bin/ims_rtp_daemon
+   class main
+   user system
+   socket ims_rtpd stream 0660 system radio
+   group radio diag diag inet log
+   disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
+
+service imscmservice /system/bin/imscmservice
+      class main
+      user system
+    group radio diag diag log
+    disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start imscmservice
+
+service imsdatadaemon /system/bin/imsdatadaemon
+    class main
+    user system
+    socket ims_datad stream 0660 system radio
+    group system wifi radio inet log diag
+    disabled
+
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon
+
+service imsqmidaemon /system/bin/imsqmidaemon
+    class main
+    user system
+    socket ims_qmid stream 0660 system radio
+    group radio log diag
+
+service fm_dl /system/bin/sh /init.qcom.fm.sh
+    class late_start
+    user system
+    group system
+    oneshot
+
+service hwaddrs /system/bin/hwaddrs
+    class core
+    user root
+    group bluetooth wifi
+    oneshot
+
+# Running hwaddrs under init is enforcing 0600, we need more
+    on property:init.svc.hwaddrs=stopped
+    chmod 644 /data/misc/wifi/config
+    chmod 644 /data/misc/bluetooth/bdaddr

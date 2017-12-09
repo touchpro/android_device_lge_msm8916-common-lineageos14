@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2015 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +36,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml
 
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
@@ -85,9 +87,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     e2fsck
 
-# Gello
+# Gestures and Glove mode package
 PRODUCT_PACKAGES += \
-    Gello
+    DeviceSettings
+
+# Jelly
+PRODUCT_PACKAGES += \
+    Jelly
+
+# FM packages
+PRODUCT_PACKAGES += \
+    FMRadio \
+    libfmjni
 
 # IRSC
 PRODUCT_COPY_FILES += \
@@ -98,10 +109,15 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
 
 # Keystore
+ifneq ($(TARGET_PROVIDES_KEYMASTER),true)
 PRODUCT_PACKAGES += \
     keystore.msm8916
+endif
 
 # Media
+PRODUCT_PACKAGES += \
+    libc2dcolorconvert
+
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
@@ -111,7 +127,7 @@ PRODUCT_COPY_FILES += \
 
 # OMX
 PRODUCT_PACKAGES += \
-    libdashplayer \
+    libextmedia_jni \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
@@ -119,8 +135,7 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
-    libstagefrighthw \
-    qcmediaplayer
+    libstagefrighthw
 
 PRODUCT_BOOT_JARS += \
     qcmediaplayer
@@ -128,6 +143,10 @@ PRODUCT_BOOT_JARS += \
 # Power HAL
 PRODUCT_PACKAGES += \
     power.msm8916
+
+# QMI
+PRODUCT_PACKAGES += \
+    libjson
 
 # Qualcomm
 PRODUCT_COPY_FILES += \
@@ -137,21 +156,21 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.qcom \
     init.qcom.rc \
     init.qcom.usb.rc \
     init.qcom.bt.sh \
     init.qcom.power.rc \
     init.recovery.qcom.rc \
-    init.target.rc \
+    init.board.fm.rc \
+    init.board.sensors.rc \
     init.baseband.sh \
+    init.qcom.fm.sh \
+    init.class_main.sh \
     ueventd.qcom.rc
 
-# Debug
-ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.secure=0 \
-    ro.adb.secure=0 \
-    security.perf_harden=0
+# QuickCircle Case App
+PRODUCT_PACKAGES += \
+    FlipFlap
 
 # RIL
 PRODUCT_PACKAGES += \
@@ -164,6 +183,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Snap
 
+# Camera
+PRODUCT_PACKAGES += \
+    libmm-qcamera \
+    camera.msm8916
+
 # Telephony-ext
 PRODUCT_PACKAGES += telephony-ext
 PRODUCT_BOOT_JARS += telephony-ext
@@ -171,6 +195,12 @@ PRODUCT_BOOT_JARS += telephony-ext
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
+
+# Lights
+ifneq ($(TARGET_PROVIDES_LIBLIGHT),true)
+PRODUCT_PACKAGES += \
+    lights.msm8916
+endif
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -183,23 +213,48 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/hostapd.accept:system/etc/hostapd/hostapd.accept \
+    $(LOCAL_PATH)/configs/hostapd.conf:system/etc/hostapd/hostapd_default.conf \
+    $(LOCAL_PATH)/configs/hostapd.deny:system/etc/hostapd/hostapd.deny \
+    $(LOCAL_PATH)/wcnss/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant.conf \
+    $(LOCAL_PATH)/wcnss/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wcnss/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/wcnss/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin \
+    $(LOCAL_PATH)/wcnss/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    $(LOCAL_PATH)/wcnss/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wcnss/prima/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    $(LOCAL_PATH)/wcnss/prima/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
+    $(LOCAL_PATH)/wcnss/prima/WCNSS_qcom_wlan_nv_boot.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv_boot.bin \
+
 # Sensor HAL conf file
 PRODUCT_COPY_FILES += \
-    device/lge/msm8916-common/configs/sensors/hals.conf:system/etc/sensors/hals.conf
+    $(LOCAL_PATH)/configs/sensors/hals.conf:system/etc/sensors/hals.conf
 
-# Gestures
+# ANT
 PRODUCT_PACKAGES += \
-    GestureHandler
+    AntHalService \
+    com.dsi.ant.antradio_library \
+    libantradio
 
-PRODUCT_COPY_FILES += \
-    device/lge/msm8916-common/wcnss/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant.conf \
-    device/lge/msm8916-common/wcnss/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
-    device/lge/msm8916-common/wcnss/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/lge/msm8916-common/wcnss/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin \
-    device/lge/msm8916-common/wcnss/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    device/lge/msm8916-common/wcnss/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    device/lge/msm8916-common/wcnss/prima/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-device/lge/msm8916-common/wcnss/prima/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
-    device/lge/msm8916-common/wcnss/prima/WCNSS_qcom_wlan_nv_boot.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv_boot.bin \
-    device/lge/msm8916-common/wcnss/prima/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
-    
+# LiveDisplay native
+PRODUCT_PACKAGES += \
+    libjni_livedisplay
+
+# Ebtables
+PRODUCT_PACKAGES += \
+    ebtables \
+    ethertypes \
+    libebtc
+
+# IMS
+PRODUCT_PACKAGES += \
+    libshims_ims
+
+# For android_filesystem_config.h
+PRODUCT_PACKAGES += \
+    fs_config_files
+
+# HWADDRS
+PRODUCT_PACKAGES += \
+    hwaddrs

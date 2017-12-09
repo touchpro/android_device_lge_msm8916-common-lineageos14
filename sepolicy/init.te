@@ -1,0 +1,2 @@
+allow init fm_radio_device:chr_file write;
+allow init wcnss_device:chr_file write;
