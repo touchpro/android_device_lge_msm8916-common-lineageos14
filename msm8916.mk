@@ -36,20 +36,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb
 
 # Audio
 PRODUCT_PACKAGES += \
     audiod \
     audio.a2dp.default \
-    audio.primary.msm8916 \
     audio.r_submix.default \
     audio.usb.default \
     audio_policy.msm8916 \
@@ -87,18 +82,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     e2fsck
 
-# Gestures and Glove mode package
-PRODUCT_PACKAGES += \
-    DeviceSettings
-
 # Jelly
 PRODUCT_PACKAGES += \
     Jelly
-
-# FM packages
-PRODUCT_PACKAGES += \
-    FMRadio \
-    libfmjni
 
 # IRSC
 PRODUCT_COPY_FILES += \
@@ -161,16 +147,10 @@ PRODUCT_PACKAGES += \
     init.qcom.bt.sh \
     init.qcom.power.rc \
     init.recovery.qcom.rc \
-    init.board.fm.rc \
     init.board.sensors.rc \
     init.baseband.sh \
-    init.qcom.fm.sh \
     init.class_main.sh \
     ueventd.qcom.rc
-
-# QuickCircle Case App
-PRODUCT_PACKAGES += \
-    FlipFlap
 
 # RIL
 PRODUCT_PACKAGES += \

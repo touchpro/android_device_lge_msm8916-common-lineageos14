@@ -207,10 +207,6 @@ on post-fs-data
     chown system system /sys/class/input/event0/device/enable
     chmod 0660 /sys/class/input/event0/device/enable
 
-    #FM Radio
-    mkdir /data/misc/fm 0770 system system
-    chmod 0770 /data/misc/fm
-
 service baseband-sh /system/bin/sh /init.baseband.sh
     class late_start
     user root
@@ -265,11 +261,6 @@ on boot
 
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
-
-    #FM Radio
-    chmod 0644 /dev/radio0
-    chown fm_radio fm_radio /dev/radio0
-    setprop ro.fm.module QCT
 
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
@@ -403,9 +394,8 @@ on boot
     # START touch_knock_on
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_data
     chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_data
-    chown system radio /sys/devices/virtual/input/lge_touch/lpwg_notify
+    chown system system /sys/devices/virtual/input/lge_touch/lpwg_notify
     chmod 664 /sys/devices/virtual/input/lge_touch/lpwg_notify
-    #write /sys/class/devices/virtual/input/lge_touch/lpwg_notify 1
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_info
     chmod 644 /sys/devices/virtual/input/lge_touch/lpwg_test_info
     chown system system /sys/devices/virtual/input/lge_touch/lpwg_test_ctrl
@@ -752,12 +742,6 @@ service imsqmidaemon /system/bin/imsqmidaemon
     user system
     socket ims_qmid stream 0660 system radio
     group radio log diag
-
-service fm_dl /system/bin/sh /init.qcom.fm.sh
-    class late_start
-    user system
-    group system
-    oneshot
 
 service hwaddrs /system/bin/hwaddrs
     class core

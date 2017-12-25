@@ -38,6 +38,7 @@ TARGET_NO_BOOTLOADER := true
 BOARD_CUSTOM_BOOTIMG := true
 BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
@@ -127,11 +128,6 @@ BOARD_GLOBAL_CFLAGS += -DUSE_RIL_VERSION_10
 BOARD_GLOBAL_CPPFLAGS += -DUSE_RIL_VERSION_10
 TARGET_RIL_VARIANT := caf
 
-# CMHW
-TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/input/lge_touch/tap_to_wake"
-BOARD_HARDWARE_CLASS += hardware/cyanogen/cmhw
-BOARD_USES_CYANOGEN_HARDWARE := true
-
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 
@@ -140,11 +136,6 @@ BOARD_SEPOLICY_DIRS += \
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
-
-# FM Radio
-AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
-BOARD_HAVE_QCOM_FM := true
-TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # Offmode Charging
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
@@ -156,21 +147,18 @@ BOARD_GLOBAL_CFLAGS += \
     -DBOARD_CHARGING_CMDLINE_VALUE='"chargerlogo"'
 
 # Wifi
-BOARD_HAS_QCOM_WCNSS := true
 BOARD_HAS_QCOM_WLAN := true
-BOARD_WLAN_DEVICE := qcwcn
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HAS_QCOM_WLAN_SDK := true
 BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_WLAN_DEVICE := qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+WIFI_DRIVER_FW_PATH_AP := "ap"
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WPA_SUPPLICANT_VERSION := VER_0_8_X
 WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan0"
-TARGET_USES_WCNSS_CTRL := true
-TARGET_USES_QCOM_WCNSS_QMI := true
-WIFI_DRIVER_FW_PATH_STA := "sta"
-WIFI_DRIVER_FW_PATH_AP := "ap"
-WLAN_PATH = wlan-caf
 
 # Media
 TARGET_HAVE_SIGNED_VENUS_FW := true
@@ -178,3 +166,6 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 
 # Sensors
 USE_SENSOR_MULTI_HAL := true
+
+# inherit from the proprietary version
+-include device/lge/common/BoardConfigCommon.mk

@@ -30,7 +30,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    qcom.bluetooth.soc=smd
+    qcom.bluetooth.soc=smd \
+    bluetooth.hfp.client=1
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
