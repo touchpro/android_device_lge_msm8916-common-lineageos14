@@ -21,6 +21,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
@@ -45,6 +46,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     audiod \
     audio.a2dp.default \
+    audio.primary.msm8916 \
     audio.r_submix.default \
     audio.usb.default \
     audio_policy.msm8916 \
@@ -187,6 +189,8 @@ PRODUCT_PACKAGES += \
     dhcpcd.conf \
     hostapd \
     hostapd_default.conf \
+    libqsap_sdk \
+    libQWiFiSoftApCfg \
     libwcnss_qmi \
     libwpa_client \
     wcnss_service \
