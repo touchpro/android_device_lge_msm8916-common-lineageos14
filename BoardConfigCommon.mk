@@ -162,7 +162,6 @@ WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan0"
-WLAN_PATH = wlan-caf
 
 # Media
 TARGET_HAVE_SIGNED_VENUS_FW := true
