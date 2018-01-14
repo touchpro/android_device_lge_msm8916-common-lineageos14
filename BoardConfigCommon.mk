@@ -84,7 +84,8 @@ BOARD_GLOBAL_CFLAGS += -DCAMERA_VENDOR_L_COMPAT
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # Crypto
-TARGET_HW_DISK_ENCRYPTION := false
+TARGET_HW_DISK_ENCRYPTION := true
+TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # Display
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
@@ -161,6 +162,7 @@ WIFI_DRIVER_FW_PATH_STA := "sta"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME := "wlan0"
+WLAN_PATH = wlan-caf
 
 # Media
 TARGET_HAVE_SIGNED_VENUS_FW := true
@@ -168,6 +170,3 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 
 # Sensors
 USE_SENSOR_MULTI_HAL := true
-
-# inherit from the proprietary version
--include device/lge/common/BoardConfigCommon.mk

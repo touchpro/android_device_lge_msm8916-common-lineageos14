@@ -31,9 +31,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     qcom.bluetooth.soc=smd \
-    ro.bluetooth.dun=true \
-    ro.bluetooth.sap=true \
-    ro.qualcomm.bt.hci_transport=smd
+    bluetooth.hfp.client=1
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -120,11 +118,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=1 \
     vidc.enc.narrow.searchrange=1
-
-# Wifi
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.disableWifiApFirmwareReload=true \
-    wifi.interface=wlan0
 
 # WiFi Display
 # PRODUCT_PROPERTY_OVERRIDES += \
