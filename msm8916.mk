@@ -152,6 +152,7 @@ PRODUCT_PACKAGES += \
     init.board.fm.rc \
     init.board.sensors.rc \
     init.baseband.sh \
+    init.wifireset.sh \
     init.qcom.fm.sh \
     init.class_main.sh \
     ueventd.qcom.rc
